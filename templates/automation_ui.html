@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>We-Wave Automation Hub</title>
+</head>
+<body class="bg-slate-900 text-white p-10">
+    <div class="max-w-2xl mx-auto border border-slate-700 p-8 rounded-2xl bg-slate-800 shadow-2xl">
+        <h1 class="text-3xl font-bold mb-2">Automation Command Center</h1>
+        <p class="text-slate-400 mb-8">Enter a topic to generate a full campaign bundle.</p>
+        
+        <input type="text" id="topic" placeholder="e.g., E-commerce Automation" 
+            class="w-full p-4 rounded-lg bg-slate-700 border-none mb-4 outline-none focus:ring-2 focus:ring-blue-500">
+        
+        <button onclick="triggerAuto()" class="w-full bg-blue-600 hover:bg-blue-700 p-4 rounded-lg font-bold transition">
+            Launch AI Automation
+        </button>
+
+        <div id="output" class="mt-8 hidden p-4 bg-slate-900 rounded-lg border border-blue-500/30">
+            <h2 class="text-blue-400 font-bold mb-2">System Output:</h2>
+            <p id="msg" class="text-sm text-slate-300"></p>
+        </div>
+    </div>
+
+    <script>
+        async function triggerAuto() {
+            const topic = document.getElementById('topic').value;
+            const out = document.getElementById('output');
+            const msg = document.getElementById('msg');
+
+            out.classList.remove('hidden');
+            msg.innerText = "Processing... Connecting to We-Wave AI Nodes...";
+
+            const res = await fetch('/run-automation', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({topic})
+            });
+            const data = await res.json();
+            msg.innerText = data.preview;
+        }
+    </script>
+</body>
+</html>
